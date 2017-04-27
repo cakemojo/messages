@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Messages Model
@@ -56,7 +57,6 @@ class MessagesTable extends Table
             ->notEmpty('model');
 
         $validator
-            ->uuid('foreign_key')
             ->requirePresence('foreign_key', 'create')
             ->notEmpty('foreign_key');
 
@@ -72,5 +72,29 @@ class MessagesTable extends Table
             ->allowEmpty('read_date');
 
         return $validator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add(
+            function ($entity, $options) {
+                $foreignRecordData = $entity->extract(['model', 'foreign_key']);
+                if (count($foreignRecordData) < 2) {
+                    return false;
+                }
+
+                return TableRegistry::get($entity->model)->exists(['id' => $entity->foreign_key]);
+            },
+            'existForeignRecord',
+            [
+                'errorField' => 'foreign_key',
+                'message' => __('Foreign record not found'),
+            ]
+        );
+
+        return $rules;
     }
 }
