@@ -29,7 +29,7 @@ class MessagesBehavior extends Behavior
         $message->id = $id;
         $message->subject = $data['subject'];
         $message->body = $data['body'];
-        $message->model = empty($data['model']) ? RepositoryInterface::alias() : $data['model'];
+        $message->model = empty($data['model']) ? $this->_table->alias() : $data['model'];
 
         $messagesTable->save($message);
 
