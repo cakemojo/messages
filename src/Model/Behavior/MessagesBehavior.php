@@ -22,16 +22,16 @@ class MessagesBehavior extends Behavior
     ];
 
     public function addMessage($id, array $data){
-        $messagesTable = TableRegistry::get('Messages');
+        $messagesTable = TableRegistry::get('CakeMojo/Messages.Messages');
 
         $message = $messagesTable->newEntity();
 
         $message->id = $id;
         $message->subject = $data['subject'];
         $message->body = $data['body'];
-        $message->model = empty($data['model']) ? $this->_table->alias() : $data['model'];
+        $message->model = empty($data['model']) ? $data['model'] = $messagesTable->getTable() : $data['model'];
 
-        $messagesTable->save($message);
+        return $messagesTable->save($message);
 
     }
 }
