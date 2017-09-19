@@ -26,10 +26,10 @@ class MessagesBehavior extends Behavior
 
         $message = $messagesTable->newEntity();
 
-        $message->id = $id;
+        $message->foreign_key = $id;
         $message->subject = $data['subject'];
         $message->body = $data['body'];
-        $message->model = empty($data['model']) ? $data['model'] = $messagesTable->getTable() : $data['model'];
+        $message->model = empty($data['model']) ? $data['model'] = $this->_table->getTable() : $data['model'];
 
         return $messagesTable->save($message);
 
