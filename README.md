@@ -37,9 +37,8 @@ public function afterSave(Event $event, EntityInterface $entity, $options)
             'subject' => 'This is the subject',
             'body' => 'This is the body' .
                 $entity->first_name . ' ' . $entity->last_name .
-                ' the message has been sended to ' . $entity->email
+                ' the message has been sent to ' . $entity->email
         ]);
 
     }
-
 ```
