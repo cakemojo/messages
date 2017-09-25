@@ -39,28 +39,11 @@ class MessagesBehavior extends Behavior
         $message = $messagesTable->newEntity();
 
         $message->foreign_key = $id;
-        $message->subject = $data['subject'];
-        $message->body = $data['body'];
+        $message->subject = Hash::get($data, 'subject');
+        $message->body = Hash::get($data, 'body');
 
-        $message->model = $this->_getTableName($data)['model'];
+        $message->model = Hash::get($data, 'model', $this->_table->getTable());
 
         return $messagesTable->save($message);
-    }
-
-    /**
-     *
-     * Get table from parameter
-     *
-     * @param $data get $data['model']
-     *
-     * @return array
-     */
-    protected function _getTableName($data)
-    {
-        if (empty($data['model'])) {
-            $data['model'] = $this->_table->getTable();
-        }
-
-        return $data;
     }
 }
